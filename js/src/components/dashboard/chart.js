@@ -1,9 +1,37 @@
 import React from "react";
 import { formatDate } from "../../utils/date";
+import styled from "styled-components";
+
+const Table = styled.table`
+  border-collapse: collapse;
+  th {
+    text-align: right;
+    padding: 3px;
+  }
+  th:first-child {
+    text-align: left;
+  }
+
+  td {
+    padding: 3px;
+  }
+
+  tr:nth-child(2n + 3) {
+    background: #a8d5e5;
+  }
+
+  tr:last-child {
+    background: #9bf59b;
+  }
+
+  .grey-text {
+    color: grey;
+  }
+`;
 
 export default function Chart(props) {
   return (
-    <table>
+    <Table>
       <tbody>
         <tr>
           <th>Facility</th>
@@ -22,7 +50,18 @@ export default function Chart(props) {
             </tr>
           );
         })}
+        <tr key="all">
+          <td className="grey-text">All</td>
+          <td>
+            {props.facilities.reduce(
+              (sum, current) => sum + current.reading.demand,
+              0
+            )}
+            kW
+          </td>
+          <td></td>
+        </tr>
       </tbody>
-    </table>
+    </Table>
   );
 }
