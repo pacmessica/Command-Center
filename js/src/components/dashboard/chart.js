@@ -1,5 +1,4 @@
 import React from "react";
-import { formatDate } from "../../utils/date";
 import styled from "styled-components";
 
 const Table = styled.table`
@@ -40,13 +39,11 @@ export default function Chart(props) {
         </tr>
         {props.facilities.map(({ id, name, reading }) => {
           let date = new Date(reading.last_seen * 1000);
-          let datestr = formatDate(date);
-
           return (
             <tr key={id}>
               <td>{name}</td>
               <td>{reading.demand}kW</td>
-              <td>{datestr}</td>
+              <td>{date.toLocaleString("en-US")}</td>
             </tr>
           );
         })}
