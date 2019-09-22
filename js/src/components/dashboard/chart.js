@@ -1,4 +1,5 @@
 import React from "react";
+import { formatDate } from "../../utils/date";
 
 export default function Chart(props) {
   return (
@@ -10,11 +11,14 @@ export default function Chart(props) {
           <th>Last Update</th>
         </tr>
         {props.facilities.map(({ id, name, reading }) => {
+          let date = new Date(reading.last_seen * 1000);
+          let datestr = formatDate(date);
+
           return (
             <tr key={id}>
               <td>{name}</td>
               <td>{reading.demand}kW</td>
-              <td>{reading.last_seen}</td>
+              <td>{datestr}</td>
             </tr>
           );
         })}
