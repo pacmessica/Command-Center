@@ -3,23 +3,28 @@ import styled from "styled-components";
 
 const Table = styled.table`
   border-collapse: collapse;
-  th {
-    text-align: right;
-    padding: 3px;
-  }
-  th:first-child {
-    text-align: left;
-  }
+  width: 100%;
 
+  th,
   td {
     padding: 3px;
+  }
+
+  .facility-col {
+    text-align: left;
+  }
+  .reading-col {
+    text-align: right;
+  }
+  .last-update-col {
+    text-align: right;
   }
 
   tr:nth-child(2n + 3) {
     background: #a8d5e5;
   }
 
-  tr:last-child {
+  tr.summary-row {
     background: #9bf59b;
   }
 
@@ -33,30 +38,31 @@ export default function Chart(props) {
     <Table>
       <tbody>
         <tr>
-          <th>Facility</th>
-          <th>Reading</th>
-          <th>Last Update</th>
+          <th className="facility-col">Facility</th>
+          <th className="reading-col">Reading</th>
+          <th className="last-update-col">Last Update</th>
         </tr>
         {props.facilities.map(({ id, name, reading }) => {
           let date = new Date(reading.last_seen * 1000);
           return (
             <tr key={id}>
-              <td>{name}</td>
-              <td>{reading.demand}kW</td>
-              <td>{date.toLocaleString("en-US")}</td>
+              <td className="facility-col">{name}</td>
+              <td className="reading-col">{reading.demand.toFixed(0)}kW</td>
+              <td className="last-update-col">
+                {date.toLocaleString("en-US")}
+              </td>
             </tr>
           );
         })}
-        <tr key="all">
-          <td className="grey-text">All</td>
-          <td>
-            {props.facilities.reduce(
-              (sum, current) => sum + current.reading.demand,
-              0
-            )}
+        <tr key="all" className="summary-row">
+          <td className="facility-col grey-text">All</td>
+          <td className="reading-col">
+            {props.facilities
+              .reduce((sum, current) => sum + current.reading.demand, 0)
+              .toFixed(0)}
             kW
           </td>
-          <td></td>
+          <td className="last-update-col"></td>
         </tr>
       </tbody>
     </Table>
