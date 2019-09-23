@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import Chart from "./chart";
+import Map from "./map";
 
 const Header = styled.div`
   width: 100%;
@@ -9,6 +10,21 @@ const Header = styled.div`
   color: white;
   padding: 24px 14px;
   font-weight: bold;
+`;
+
+const FlexContainer = styled.div`
+  height: 100%;
+  display: flex;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+`;
+
+const FlexItem = styled.div`
+  flex: ${props => (props.flex ? props.flex : 1)};
+  margin: 0;
+  min-width: ${props => (props.minWidth ? props.minWidth : 0)};
 `;
 
 function Dashboard() {
@@ -46,15 +62,30 @@ function Dashboard() {
     return { id, name, reading };
   });
 
+  let mapMarkers = company.facilities.map(({ id, name, coord }) => {
+    return { key: id, content: name, position: coord };
+  });
+
   return (
-    <div>
+    <>
       <Header>{company.name}</Header>
-      {readings.length > 0 ? (
-        <Chart facilities={facilitiesWithReading} />
-      ) : (
-        <div>Loading...</div>
-      )}
-    </div>
+      <FlexContainer>
+        <FlexItem flex={1} minWidth={"400px"}>
+          {readings.length > 0 ? (
+            <Chart facilities={facilitiesWithReading} />
+          ) : (
+            <div>Loading...</div>
+          )}
+        </FlexItem>
+        <FlexItem flex={3}>
+          {mapMarkers.length > 0 ? (
+            <Map markers={mapMarkers} />
+          ) : (
+            <div>Loading...</div>
+          )}
+        </FlexItem>
+      </FlexContainer>
+    </>
   );
 }
 export default Dashboard;
