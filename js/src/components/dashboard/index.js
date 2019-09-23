@@ -37,6 +37,18 @@ const ShadowBox = styled.div`
   box-sizing: border-box;
 `;
 
+const ContentBox = styled.div`
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .content {
+    color: #bebebe;
+    font-weight: bold;
+    font-size: 30px;
+  }
+`;
+
 function Dashboard() {
   const [company, setCompany] = useState({ name: "", id: "", facilities: [] });
   useEffect(() => {
@@ -85,8 +97,12 @@ function Dashboard() {
       <Header>{company.name}</Header>
       <FlexContainer>
         <FlexItem flex={1} minWidth={"400px"}>
-          <ShadowBox height={"50%"}>[PLACEHOLDER]</ShadowBox>
-          <ShadowBox height={"50%"}>
+          <ShadowBox>
+            <ContentBox>
+              <div className="content">[PLACEHOLDER]</div>
+            </ContentBox>
+          </ShadowBox>
+          <ShadowBox>
             {readings.length > 0 ? (
               <Chart facilities={facilitiesWithReading} />
             ) : (
