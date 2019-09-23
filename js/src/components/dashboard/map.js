@@ -14,7 +14,7 @@ const MyMarkersList = ({ markers }) => {
   return <Fragment>{items}</Fragment>;
 };
 
-export default function LeafletMap(props) {
+function LeafletMap(props) {
   let bounds = props.markers.map(({ position }) => position);
   return (
     <Map bounds={bounds}>
@@ -26,3 +26,5 @@ export default function LeafletMap(props) {
     </Map>
   );
 }
+
+export default React.memo(LeafletMap);

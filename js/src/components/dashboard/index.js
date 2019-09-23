@@ -67,13 +67,17 @@ function Dashboard() {
     return () => clearInterval(interval);
   }, [company]);
 
+  const [mapMarkers, setMapMarkers] = useState([]);
+  useEffect(() => {
+    let markers = company.facilities.map(({ id, name, coord }) => {
+      return { key: id, content: name, position: coord };
+    });
+    setMapMarkers(markers);
+  }, [company]);
+
   let facilitiesWithReading = company.facilities.map(({ id, name }) => {
     let reading = readings.find(reading => reading.facility_id === id);
     return { id, name, reading };
-  });
-
-  let mapMarkers = company.facilities.map(({ id, name, coord }) => {
-    return { key: id, content: name, position: coord };
   });
 
   return (
