@@ -13,9 +13,9 @@ import {
 function Dashboard() {
   const [company, setCompany] = useState({ name: "", id: "", facilities: [] });
   useEffect(() => {
+    let companyId = window.location.pathname;
     async function fetchCompany() {
-      let url = "/facilities/371fc3c9-fb5b-4892-b371-33d49e19b506"; // TODO get id from url
-      const response = await axios(url);
+      const response = await axios(`/facilities${companyId}`);
       setCompany(response.data);
     }
     fetchCompany();
