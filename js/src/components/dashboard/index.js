@@ -8,8 +8,10 @@ const Header = styled.div`
   width: 100%;
   background: #818181;
   color: white;
-  padding: 24px 14px;
+  padding-left: 14px;
   font-weight: bold;
+  height: 64px;
+  line-height: 64px;
 `;
 
 const FlexContainer = styled.div`
@@ -18,13 +20,21 @@ const FlexContainer = styled.div`
   width: 100%;
   margin: 0;
   padding: 0;
-  height: 100%;
+  height: calc(100vh - 64px);
 `;
 
 const FlexItem = styled.div`
   flex: ${props => (props.flex ? props.flex : 1)};
   margin: 0;
   min-width: ${props => (props.minWidth ? props.minWidth : 0)};
+`;
+
+const ShadowBox = styled.div`
+  margin: 2%;
+  height: 48%;
+
+  box-shadow: 1px 3px 6px 0 #d3d3d3;
+  box-sizing: border-box;
 `;
 
 function Dashboard() {
@@ -71,11 +81,14 @@ function Dashboard() {
       <Header>{company.name}</Header>
       <FlexContainer>
         <FlexItem flex={1} minWidth={"400px"}>
-          {readings.length > 0 ? (
-            <Chart facilities={facilitiesWithReading} />
-          ) : (
-            <div>Loading...</div>
-          )}
+          <ShadowBox height={"50%"}>[PLACEHOLDER]</ShadowBox>
+          <ShadowBox height={"50%"}>
+            {readings.length > 0 ? (
+              <Chart facilities={facilitiesWithReading} />
+            ) : (
+              <div>Loading...</div>
+            )}
+          </ShadowBox>
         </FlexItem>
         <FlexItem flex={3}>
           {mapMarkers.length > 0 ? (
