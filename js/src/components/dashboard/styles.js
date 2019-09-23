@@ -70,3 +70,10 @@ export const ContentBox = styled.div`
     font-size: 30px;
   }
 `;
+
+export const Banner = styled.div`
+  background: ${props => (props.warning ? "tomato" : "green")};
+  padding: 15px;
+  color: white;
+  font-weight: bold;
+`;

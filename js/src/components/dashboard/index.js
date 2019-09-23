@@ -7,16 +7,23 @@ import {
   FlexContainer,
   LeftPanel,
   ContentBox,
-  ShadowBox
+  ShadowBox,
+  Banner
 } from "./styles";
 
 function Dashboard() {
+  const [error, setError] = useState("");
   const [company, setCompany] = useState({ name: "", id: "", facilities: [] });
   useEffect(() => {
     let companyId = window.location.pathname;
     async function fetchCompany() {
-      const response = await axios(`/facilities${companyId}`);
-      setCompany(response.data);
+      setError("");
+      try {
+        const response = await axios(`/facilities${companyId}`);
+        setCompany(response.data);
+      } catch (err) {
+        setError(err.message);
+      }
     }
     fetchCompany();
   }, []);
@@ -24,11 +31,17 @@ function Dashboard() {
   const [readings, setReadings] = useState([]);
   useEffect(() => {
     let faciltiyIds = company.facilities.map(({ id }) => id);
+    if (faciltiyIds.length === 0) {
+      return;
+    }
     async function fetchReadings() {
-      const response = await axios.post("/facilities/demand", faciltiyIds);
-      console.log(response.data);
-
-      setReadings(response.data);
+      setError("");
+      try {
+        const response = await axios.post("/facilities/demand", faciltiyIds);
+        setReadings(response.data);
+      } catch (err) {
+        setError(err.message);
+      }
     }
 
     if (faciltiyIds.length > 0) {
@@ -56,6 +69,7 @@ function Dashboard() {
   return (
     <>
       <Header>{company.name}</Header>
+      {!!error && <Banner warning>{error}</Banner>}
       <FlexContainer>
         <LeftPanel className="aside">
           <ShadowBox className="item">
@@ -67,7 +81,7 @@ function Dashboard() {
             {readings.length > 0 ? (
               <Chart facilities={facilitiesWithReading} />
             ) : (
-              <div>Loading...</div>
+              <div>{!error ? "Loading..." : ""}</div>
             )}
           </ShadowBox>
         </LeftPanel>
@@ -75,11 +89,12 @@ function Dashboard() {
           {mapMarkers.length > 0 ? (
             <Map markers={mapMarkers} />
           ) : (
-            <div>Loading...</div>
+            <div>{!error ? "Loading..." : ""}</div>
           )}
         </div>
       </FlexContainer>
     </>
   );
 }
+
 export default Dashboard;
