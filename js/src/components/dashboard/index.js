@@ -1,53 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import styled from "styled-components";
 import Chart from "./chart";
 import Map from "./map";
-
-const Header = styled.div`
-  width: 100%;
-  background: #818181;
-  color: white;
-  padding-left: 14px;
-  font-weight: bold;
-  height: 64px;
-  line-height: 64px;
-`;
-
-const FlexContainer = styled.div`
-  height: 100%;
-  display: flex;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  height: calc(100vh - 64px);
-`;
-
-const FlexItem = styled.div`
-  flex: ${props => (props.flex ? props.flex : 1)};
-  margin: 0;
-  min-width: ${props => (props.minWidth ? props.minWidth : 0)};
-`;
-
-const ShadowBox = styled.div`
-  margin: 2%;
-  height: 48%;
-
-  box-shadow: 1px 3px 6px 0 #d3d3d3;
-  box-sizing: border-box;
-`;
-
-const ContentBox = styled.div`
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .content {
-    color: #bebebe;
-    font-weight: bold;
-    font-size: 30px;
-  }
-`;
+import {
+  Header,
+  FlexContainer,
+  LeftPanel,
+  ContentBox,
+  ShadowBox
+} from "./styles";
 
 function Dashboard() {
   const [company, setCompany] = useState({ name: "", id: "", facilities: [] });
@@ -96,27 +57,27 @@ function Dashboard() {
     <>
       <Header>{company.name}</Header>
       <FlexContainer>
-        <FlexItem flex={1} minWidth={"400px"}>
-          <ShadowBox>
+        <LeftPanel className="aside">
+          <ShadowBox className="item">
             <ContentBox>
               <div className="content">[PLACEHOLDER]</div>
             </ContentBox>
           </ShadowBox>
-          <ShadowBox>
+          <ShadowBox className="item">
             {readings.length > 0 ? (
               <Chart facilities={facilitiesWithReading} />
             ) : (
               <div>Loading...</div>
             )}
           </ShadowBox>
-        </FlexItem>
-        <FlexItem flex={3}>
+        </LeftPanel>
+        <div className="map-container">
           {mapMarkers.length > 0 ? (
             <Map markers={mapMarkers} />
           ) : (
             <div>Loading...</div>
           )}
-        </FlexItem>
+        </div>
       </FlexContainer>
     </>
   );
