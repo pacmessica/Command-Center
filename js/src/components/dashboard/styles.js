@@ -34,7 +34,7 @@ export const FlexContainer = styled.div`
       flex: 1 0 0;
     }
     .map-container {
-      flex: 3 0px;
+      flex: 2 0px;
       height: auto;
       margin: 0;
     }
