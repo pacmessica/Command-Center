@@ -19,7 +19,7 @@ import (
 func main() {
 	cmdChallengeKey := flag.String("api-key", "", "api key for command challenge service")
 	cmdChallengeSecret := flag.String("api-secret", "", "api-secret for command challenge service")
-	cmdChallngeURL := flag.String("api-url", "", "url for command challenge service backend")
+	cmdChallengeURL := flag.String("api-url", "", "url for command challenge service backend")
 	dataDirectory := flag.String("data-directory", "data/", "directory where company_list.json is stored")
 	httpListenAddress := flag.String("http", ":3002", "port service is listening on, eg :3000")
 
@@ -36,7 +36,7 @@ func main() {
 		log.Fatalf("cannot initiate repo: %v", err)
 	}
 
-	demandClient := clients.NewDemandClient(*cmdChallngeURL, *cmdChallengeKey, *cmdChallengeSecret)
+	demandClient := clients.NewDemandClient(*cmdChallengeURL, *cmdChallengeKey, *cmdChallengeSecret)
 	facilityHandler := facility.NewHandler(organizationRepo, demandClient)
 
 	r := mux.NewRouter()
