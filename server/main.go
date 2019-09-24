@@ -25,11 +25,11 @@ func main() {
 
 	flag.Parse()
 
-	fields := make(map[string]interface{})
-	flag.VisitAll(func(arg *flag.Flag) {
-		fields[arg.Name] = arg.Value
-	})
-	log.WithFields(fields).Info("started service")
+	log.WithFields(log.Fields{
+		"api-url":        cmdChallengeURL,
+		"http":           httpListenAddress,
+		"data-directory": dataDirectory,
+	}).Info("started service")
 
 	organizationRepo, err := storage.NewOrganizationRepository(*dataDirectory)
 	if err != nil {
