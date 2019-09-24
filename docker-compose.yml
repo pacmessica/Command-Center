@@ -1,0 +1,19 @@
+version: "3"
+services:
+  cmd-server:
+    build: ./server
+    ports:
+      - "3002:3002"
+    volumes:
+      - "./server/data:/data"
+    environment:
+      - API_URL=https://command-challenge-service.dev-cluster.voltus.co
+      - DATA_DIR=/data
+  frontend:
+    container_name: frontend
+    build: ./js
+    volumes:
+      - "./js:/app"
+      - "/app/node_modules"
+    ports:
+      - "3000:3000"

@@ -2,7 +2,7 @@
   "name": "command-challenge",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:3002",
+  "proxy": "http://cmd-server:3002",
   "dependencies": {
     "axios": "^0.19.0",
     "leaflet": "^1.5.1",
