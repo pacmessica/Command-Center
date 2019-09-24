@@ -7,6 +7,8 @@ import (
 	"strings"
 
 	"github.com/pacmessica/command-center/server/facility"
+
+	log "github.com/sirupsen/logrus"
 )
 
 const fileName = "company_list.json"
@@ -24,6 +26,8 @@ func NewOrganizationRepository(dataPath string) (facility.OrganizationRepository
 	if err != nil {
 		return nil, err
 	}
+
+	log.WithField("len_organizations", len(organizations)).Info("Initalized organization repository")
 
 	return &organizationRepository{
 		organizations: organizations,
@@ -52,8 +56,8 @@ func loadOrganizationsFromFile(filePath string) (map[string]*facility.Organizati
 	}
 
 	organizationMap := make(map[string]*facility.Organization)
-	for _, o := range organizations {
-		organizationMap[o.ID] = o
+	for _, org := range organizations {
+		organizationMap[org.ID] = org
 	}
 
 	return organizationMap, nil
