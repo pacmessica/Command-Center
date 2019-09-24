@@ -26,9 +26,9 @@ func main() {
 	flag.Parse()
 
 	log.WithFields(log.Fields{
-		"api-url":        cmdChallengeURL,
-		"http":           httpListenAddress,
-		"data-directory": dataDirectory,
+		"api-url":        *cmdChallengeURL,
+		"http":           *httpListenAddress,
+		"data-directory": *dataDirectory,
 	}).Info("started service")
 
 	organizationRepo, err := storage.NewOrganizationRepository(*dataDirectory)
