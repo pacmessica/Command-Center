@@ -8,7 +8,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-type FacilityHandler interface {
+type Handler interface {
 	GetByOrganizationID(w http.ResponseWriter, r *http.Request)
 	GetReadings(w http.ResponseWriter, r *http.Request)
 }
@@ -18,7 +18,7 @@ type facilityHandler struct {
 	demandClient     DemandClient
 }
 
-func NewHandler(organizationRepo OrganizationRepository, demandClient DemandClient) FacilityHandler {
+func NewHandler(organizationRepo OrganizationRepository, demandClient DemandClient) Handler {
 	return &facilityHandler{
 		organizationRepo,
 		demandClient,
@@ -28,20 +28,23 @@ func NewHandler(organizationRepo OrganizationRepository, demandClient DemandClie
 func (fh *facilityHandler) GetByOrganizationID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["organizationID"]
-
-	log.WithFields(log.Fields{
+	logger := log.WithFields(log.Fields{
 		"method":          "GetByOrganizationID",
 		"organization_id": id,
-	}).Info("new request")
+	})
+
+	logger.Info("new request")
 
 	organization, err := fh.organizationRepo.GetByID(id)
 	if err != nil {
-		w.WriteHeader(http.StatusNotFound) // TODO
+		logger.Error("could not find organization")
+		w.WriteHeader(http.StatusNotFound)
 		return
 	}
 
 	b, err := json.Marshal(organization)
 	if err != nil {
+		logger.Error("could not marshal organization response")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -50,16 +53,20 @@ func (fh *facilityHandler) GetByOrganizationID(w http.ResponseWriter, r *http.Re
 	w.WriteHeader(http.StatusOK)
 	_, err = w.Write(b)
 	if err != nil {
-		log.WithError(err).Error("could not write response body")
+		logger.WithError(err).Error("could not write response body")
 	}
 }
 
 func (fh *facilityHandler) GetReadings(w http.ResponseWriter, r *http.Request) {
 	var ids []string
+	logger := log.WithFields(log.Fields{
+		"method": "GetReadings",
+	})
 
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&ids)
 	if err != nil {
+		logger.Error("could not decode request ids")
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 		return
@@ -71,13 +78,11 @@ func (fh *facilityHandler) GetReadings(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.WithFields(log.Fields{
-		"method":       "GetReadings",
-		"facility_ids": ids,
-	}).Info("new request")
+	logger.WithField("facility_ids", ids).Info("new request")
 
 	readings, err := fh.demandClient.GetReadingsForFacilities(ids)
 	if err != nil {
+		logger.Error("could not fetch demand from client")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
