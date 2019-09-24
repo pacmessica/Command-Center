@@ -17,9 +17,9 @@ function Dashboard() {
   useEffect(() => {
     let companyId = window.location.pathname;
     async function fetchCompany() {
-      setError("");
       try {
         const response = await axios(`/facilities${companyId}`);
+        setError("");
         setCompany(response.data);
       } catch (err) {
         setError(err.message);
@@ -35,9 +35,9 @@ function Dashboard() {
       return;
     }
     async function fetchReadings() {
-      setError("");
       try {
         const response = await axios.post("/facilities/demand", faciltiyIds);
+        setError("");
         setReadings(response.data);
       } catch (err) {
         setError(err.message);
@@ -49,7 +49,7 @@ function Dashboard() {
     }
     const interval = setInterval(() => {
       fetchReadings();
-    }, 10000); // TODO
+    }, 15000);
     return () => clearInterval(interval);
   }, [company]);
 
