@@ -23,7 +23,7 @@ To build and run the complete project for the first time, run the following comm
 $ docker-compose up --build
 ```
 
-When the frontend is ready, go to http://localhost:3000/{companyID} ((example)[http://localhost:3000/371fc3c9-fb5b-4892-b371-33d49e19b506]) to see a company's dashboard.
+When the frontend is ready, go to `http://localhost:3000/{companyID}` ([example](http://localhost:3000/371fc3c9-fb5b-4892-b371-33d49e19b506)) to see a company's dashboard.
 
 To run an already built project, remove the `--build` flag
 
