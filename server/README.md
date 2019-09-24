@@ -1,6 +1,6 @@
-## Command Server
+## Command Server APi
 
-Write a webserver that serves the following API, given the data provided in `company_list.json`
+The command server is a webserver that serves the following API endpoints
 
 #### `GET /facilities/<organization_id: uuid>`
 
@@ -26,7 +26,7 @@ Example return:
 }
 ```
 
-Where the top-level `name` is the name of the organization, and `facilities` is a json array of facilities belonging to the organization. The `coord` array in each facility is the latitude and longitude where they are located.
+Where the top-level `name` is the name of the organization, and `facilities` is a json array of facilities belonging to the organization. The `coord` array in each facility is the latitude and longitude of where they are located.
 
 Companies are fetched from the organization repository, which is currently implemented as a memory store based off a json file that is loaded into memory on startup. If an organization is not found, the repository returns a custom not found error. Currently the handler doesn't check the error type and always returns a 404
 
@@ -57,7 +57,7 @@ It returns an array of demands for each facility where `demand` is the latest en
 
 This demand is pulled directly from an upstream backend service (see `clients/demand.go`).
 
-If there is an error while fetching the demand for one of the requested facilities, the demand client will return an error. Currently these errors are always returned as an internal server error in the http request. Further improvements could be made
+If there is an error while fetching the demand for one of the requested facilities, the demand client will return an error. Currently these errors are always returned as an internal server error in the http request.
 
 ## Further Improvements
 
