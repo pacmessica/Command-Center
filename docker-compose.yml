@@ -6,6 +6,8 @@ services:
       - "3002:3002"
     volumes:
       - "./server/data:/data"
+    env_file:
+      - ./server/server.env
     environment:
       - API_URL=https://command-challenge-service.dev-cluster.voltus.co
       - DATA_DIR=/data
