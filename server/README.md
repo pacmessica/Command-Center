@@ -75,3 +75,11 @@ The demand client in `client/demand.go` currently always fetches the demand dire
 If a call to the external client fails, it returns an error right away. Retry logic could be added for 500+ status errors.
 
 All calls to the external client are performed concurrently in a go routine. This could be problematic for requests with large numbers of ids. We may want to limit the number of requests to the external service being performed at a time (for example with a buffered channel).
+
+### Testing
+
+To run tests:
+
+```sh
+$ go test ./... # unit tests
+```
