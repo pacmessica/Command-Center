@@ -33,16 +33,38 @@ func NewDemandClient(baseURL, clientKey, clientSecret string) facility.DemandCli
 }
 
 func (dc *demandClient) GetReadingsForFacilities(facilityIDs []string) ([]*facility.Reading, error) {
-	readings := make([]*facility.Reading, len(facilityIDs))
-
-	// TODO goroutine
-	for i, facID := range facilityIDs {
-		reading, err := dc.GetReading(facID)
-		if err != nil {
-			return nil, err
-		}
-		readings[i] = reading
+	type result struct {
+		reading *facility.Reading
+		err     error
 	}
+
+	ch := make(chan result)
+	defer close(ch)
+
+	for i, facID := range facilityIDs {
+		go func(id string, i int) {
+			reading, err := dc.GetReading(id)
+			ch <- result{reading, err}
+		}(facID, i)
+	}
+
+	readings := []*facility.Reading{}
+	var resultErr error
+	for result := range ch {
+		if result.err != nil {
+			resultErr = result.err
+		}
+		readings = append(readings, result.reading)
+
+		if len(readings) == len(facilityIDs) {
+			break
+		}
+	}
+
+	if resultErr != nil {
+		return nil, resultErr
+	}
+
 	return readings, nil
 }
 
