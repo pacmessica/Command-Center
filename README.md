@@ -11,8 +11,8 @@ The project consists of two directories: `server/`, containing the backend golan
 In the root of `server/`, create a `server.env` file. Add the credentials for interacting with the voltus backend client to your server.env file under the keys API_KEY and API_SECRET.
 
 ```
-API_KEY=voltus_bkend_api_key
-API_SECRET=voltus_bkend_secret
+API_KEY=bkend_api_key
+API_SECRET=bkend_secret
 ```
 
 ### Running the project
